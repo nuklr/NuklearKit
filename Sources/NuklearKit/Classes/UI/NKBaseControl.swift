@@ -1,8 +1,8 @@
 //
-//  NKContainer.swift
+//  NKBaseControl.swift
 //  NuklearKit
 //
-//  Created by Thomas Bonk on 12.04.19.
+//  Created by Thomas Bonk on 22.04.19.
 //
 //  Copyright 2019 Nuklr Development Kit
 //
@@ -21,23 +21,26 @@
 
 import Foundation
 
-/**
- This protocol shall be implemented by classes that act as a comntainer
- for controls.
- */
-public protocol NKContainer {
+open class NKBaseControl: NKControl {
 
-    /**
-     Add a control to the container.
+    // MARK: - Public Propertis
 
-     - Parameter control: The control that shall be added
-     */
-    func add(control: NKControl)
+    public private(set) var id = UUID()
 
-    /**
-     Remove a control from the container.
+    /// This is the container to which this control belongs to
+    public private(set) var container: NKContainer? = nil
 
-     - Parameter control: The control that shall be removed
-     */
-    func remove(control: NKControl)
+    // MARK: - NKControl
+
+    public func didMove(to container: NKContainer) {
+        self.container = container
+    }
+
+    public func didRemove(from container: NKContainer) {
+        self.container = nil
+    }
+
+    open func render() {
+
+    }
 }

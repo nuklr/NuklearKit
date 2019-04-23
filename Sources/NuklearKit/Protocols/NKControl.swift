@@ -21,7 +21,34 @@
 
 import Foundation
 
+/**
+ This protocol shall be implemented by controls.
+ */
 public protocol NKControl {
+
+    /**
+     The unique ID of the control instance.
+     */
     var id: UUID { get }
+
+
+    /**
+     This method is called after the control was moved to a container.
+
+     - Parameter container: The container where this control has been moved to.
+     */
+    func didMove(to container: NKContainer)
+
+    /**
+     This method is called after the control has been removed from a controler.
+
+     - Parameter container: The container where this control has been removed from.
+     */
+    func didRemove(from container: NKContainer)
+
+    /**
+     This method is called when the control shall be rendered.
+     */
+    func render()
 }
 

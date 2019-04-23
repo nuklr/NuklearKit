@@ -20,15 +20,71 @@
 //
 
 import Foundation
+import Nuklear
 
 open class NKComponent: NKContainer {
-    
+
     // MARK: - Private Properties
-    
-    private var _children: [NKControl] = []
+
+    private var context: nk_context!
+
     
     // MARK: - Public Properties
-    
-    public var children: [NKControl] = []
-    
+
+    /**
+     The child controls that are contained in this component.
+     */
+    public private(set) var children: [NKControl] = []
+
+    public              var frame: NSRect
+
+
+    // MARK: - Initialization
+
+    public init() {
+        self.frame = NSRect(x: 0, y: 0, width: 0, height: 0)
+    }
+
+    public init(frame: NSRect) {
+        self.frame = frame
+    }
+
+
+    // MARK: - NKContainer
+
+    public func add(control: NKControl) {
+        children.append(control)
+        control.didMove(to: self)
+    }
+
+    public func remove(control: NKControl) {
+        if let index = children.firstIndex(where: { $0.id == control.id }) {
+            children.remove(at: index)
+            control.didRemove(from: self)
+        }
+    }
+
+    // MARK: - Public API
+
+    /**
+     This method is called when the container shall render itself.
+     */
+    open func render() {
+        nk_init_default(&context, nil)
+
+        if nk_begin(
+            &context,
+            "",
+            nk_rect(
+                Float(self.frame.minX),
+                Float(self.frame.minY),
+                Float(self.frame.width),
+                Float(self.frame.height)),
+            NK_WINDOW_SCROLL_AUTO_HIDE.rawValue) == 0 {
+            
+            children.forEach { $0.render() }
+        }
+
+        nk_end(&context)
+    }
 }
