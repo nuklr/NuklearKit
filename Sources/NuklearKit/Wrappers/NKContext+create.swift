@@ -30,7 +30,7 @@ public extension NKContext {
   ///           failed
   static func create(userFont font: NKUserFont? = nil) throws -> NKContext {
     var ctx = NKContext()
-    var initialized: nk_bool
+    var initialized: Bool
 
     if var fnt = font {
       initialized = nk_init_default(&ctx, &fnt)
@@ -38,7 +38,7 @@ public extension NKContext {
       initialized = nk_init_default(&ctx, nil)
     }
 
-    guard initialized != 0 else {
+    guard initialized else {
       throw NKError.contextInitializationError
     }
 
